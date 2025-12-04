@@ -10,6 +10,7 @@ Then run:
 
 ```shell
 arm-toolchain use v21.1.1
+ln -s "$(arm-toolchain locate)" toolchain
 atrun cargo v5 build
 ```
 
