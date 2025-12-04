@@ -1,0 +1,9 @@
+[target.'cfg(target_os = "vexos")']
+rustflags = ["-Clink-arg=-Tvexide.ld", "-Clink-arg=-Ltoolchain/lib/clang-runtimes/arm-none-eabi/armv7a_hard_vfpv3_d16_exn_rtti_unaligned/lib"]
+
+[unstable]
+build-std = ["std", "panic_abort"]
+build-std-features = ["compiler-builtins-mem"]
+
+[env]
+CFLAGS = "-mcpu=cortex-a9 -ftls-model=local-exec -fno-pic"

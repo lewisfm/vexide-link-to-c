@@ -1,0 +1,11 @@
+[workspace]
+members = ["vexc-sys"]
+
+[package]
+name = "vexc"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+vexc-sys = { version = "0.1.0", path = "vexc-sys" }
+vexide = { version = "0.8.0", features = ["full", "default-sdk"] }
