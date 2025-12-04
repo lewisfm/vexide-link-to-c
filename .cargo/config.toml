@@ -13,4 +13,4 @@ build-std = ["std", "panic_abort"]
 build-std-features = ["compiler-builtins-mem"]
 
 [env]
-TARGET_CFLAGS = "-mcpu=cortex-a9 -ftls-model=local-exec -fno-pic"
+armv7a_vex_v5_CFLAGS = "-mcpu=cortex-a9 -ftls-model=local-exec -fno-pic"
