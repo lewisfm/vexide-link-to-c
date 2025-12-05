@@ -1,5 +1,6 @@
 #include <stddef.h>
 #include <stdint.h>
+#include <stdio.h>
 
 int32_t vexSerialWriteChar(uint32_t channel, uint8_t c);
 int32_t vexSerialWriteFree(uint32_t channel);
@@ -25,6 +26,8 @@ extern FILE *const stdout [[gnu::alias("stdin")]];
 extern FILE *const stderr [[gnu::alias("stdin")]];
 
 int serial_putc(char c, FILE *file) {
+    (void) file;
+
     int rtn = vexSerialWriteChar(STDIO_CHANNEL, c);
 
     while (vexSerialWriteFree(STDIO_CHANNEL) < 2048) {
@@ -35,14 +38,18 @@ int serial_putc(char c, FILE *file) {
 }
 
 int serial_getc(FILE *file) {
+    (void) file;
     return 0;
 }
 
 int serial_flush(FILE *file) {
+    (void) file;
     return 0;
 }
 
 void _exit(int code) {
+    (void) code;
+
     vexSystemExitRequest();
 
     while (true) {
@@ -51,5 +58,8 @@ void _exit(int code) {
 }
 
 int getentropy(void *buf, size_t buflen) {
+    (void) buf;
+    (void) buflen;
+
     return 0;
 }
