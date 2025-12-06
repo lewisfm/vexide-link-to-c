@@ -9,7 +9,6 @@ Install cargo-v5 from the Git branch "toolchain"
 Then run:
 
 ```shell
-cargo v5 toolchain install
 cargo v5 build
 ```
 
@@ -33,3 +32,13 @@ C Stdlibs:
   - Target flags: `--target=armv7a-none-eabihf -mcpu=cortex-a9 -fno-rtti`
   - Link to correct stdlibs: `-nostartfiles -lc -lm`
     - Explicit `-lc` required because Rust calls the linker with `-nodefaultlibs` which disables libc, libm, etc.
+
+## IDE support
+
+This part may need some work... clangd is really bad at finding include directories for this toolchain even if you give it a correct `compile_commands.json`. Using a query driver hasn't seemed to work well for me either. The current solution is to make a `.clangd` config and pass in the path to the correct `include/` via additional compiler flags.
+
+You'll have to make a symlink to the toolchain for this to work properly. The `arm-toolchain` command is from <https://github.com/vexide/arm-toolchain>.
+
+```shell
+ln -s "$(arm-toolchain locate)" toolchain
+```
