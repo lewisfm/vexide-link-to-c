@@ -23,3 +23,7 @@ toolchain = "llvm-21.1.1"
 
 [lints.rust]
 unexpected_cfgs = { level = "warn", check-cfg = ['cfg(vexide_toolchain, values("llvm"))'] }
+
+[profile.release]
+lto = true
+opt-level = "z"
