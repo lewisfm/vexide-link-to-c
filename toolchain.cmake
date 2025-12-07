@@ -1,0 +1,10 @@
+set(CMAKE_SYSTEM_NAME Generic)
+set(CMAKE_SYSTEM_PROCESSOR arm)
+
+set(triple armv7a-none-eabihf)
+
+set(CMAKE_C_COMPILER clang)
+set(CMAKE_C_COMPILER_TARGET ${triple})
+set(CMAKE_CXX_COMPILER clang++)
+set(CMAKE_CXX_COMPILER_TARGET ${triple})
+set(CMAKE_TRY_COMPILE_TARGET_TYPE "STATIC_LIBRARY")
