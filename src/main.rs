@@ -20,13 +20,15 @@ async fn main(_p: Peripherals) -> Result<(), rusqlite::Error> {
         sqlite3_initialize();
     }
 
+    println!();
+
     let conn = Connection::open_in_memory()?;
     conn.execute(
-        "CREATE TABLE person (
-            id    INTEGER PRIMARY KEY,
-            name  TEXT NOT NULL,
-            data  BLOB
-        )",
+        trace("CREATE TABLE person (
+    id    INTEGER PRIMARY KEY,
+    name  TEXT NOT NULL,
+    data  BLOB
+)"),
         (), // empty list of parameters.
     )?;
     let me = Person {
@@ -35,11 +37,14 @@ async fn main(_p: Peripherals) -> Result<(), rusqlite::Error> {
         data: None,
     };
     conn.execute(
-        "INSERT INTO person (name, data) VALUES (?1, ?2)",
+        trace("INSERT INTO person (name, data) VALUES (?1, ?2)"),
         (&me.name, &me.data),
     )?;
 
-    let mut stmt = conn.prepare("SELECT id, name, data FROM person")?;
+    let mut stmt = conn.prepare(trace("SELECT id, name, data FROM person"))?;
+
+    println!();
+
     let person_iter = stmt.query_map([], |row| {
         Ok(Person {
             id: row.get(0)?,
@@ -52,4 +57,9 @@ async fn main(_p: Peripherals) -> Result<(), rusqlite::Error> {
         println!("Found person {:?}", person.unwrap());
     }
     Ok(())
+}
+
+fn trace(s: &str) -> &str {
+    println!("{s}");
+    s
 }
