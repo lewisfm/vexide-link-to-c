@@ -1,12 +1,55 @@
-use vexc_sys::vexc_sum;
+use rusqlite::Connection;
 use vexide::prelude::*;
+use libsqlite3_sys::sqlite3_initialize;
+
+#[derive(Debug)]
+#[allow(unused)]
+struct Person {
+    id: i32,
+    name: String,
+    data: Option<Vec<u8>>,
+}
 
 #[vexide::main]
-async fn main(_p: Peripherals) {
+async fn main(_p: Peripherals) -> Result<(), rusqlite::Error> {
     println!("Vexide LLVM toolchain: {}", cfg!(vexide_toolchain = "llvm"));
 
-    for n in 0..5 {
-        let sum = unsafe { vexc_sum(n, 5) };
-        println!("(From Rust) Sum: {sum}");
+    unsafe {
+        // rusqlite doesn't do this automatically. On Unix and Windows
+        // the (deprecated) behavior is for it to be implicit.
+        sqlite3_initialize();
     }
+
+    let conn = Connection::open_in_memory()?;
+    conn.execute(
+        "CREATE TABLE person (
+            id    INTEGER PRIMARY KEY,
+            name  TEXT NOT NULL,
+            data  BLOB
+        )",
+        (), // empty list of parameters.
+    )?;
+    let me = Person {
+        id: 0,
+        name: "Steven".to_string(),
+        data: None,
+    };
+    conn.execute(
+        "INSERT INTO person (name, data) VALUES (?1, ?2)",
+        (&me.name, &me.data),
+    )?;
+
+    let mut stmt = conn.prepare("SELECT id, name, data FROM person")?;
+    let person_iter = stmt.query_map([], |row| {
+        Ok(Person {
+            id: row.get(0)?,
+            name: row.get(1)?,
+            data: row.get(2)?,
+        })
+    })?;
+
+    for person in person_iter {
+        println!("Found person {:?}", person.unwrap());
+    }
+    Ok(())
 }

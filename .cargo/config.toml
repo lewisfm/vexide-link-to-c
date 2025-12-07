@@ -4,3 +4,6 @@ rustflags = ["-Clink-arg=-Tvexide.ld"]
 [unstable]
 build-std = ["std", "panic_abort"]
 build-std-features = ["compiler-builtins-mem"]
+
+[env]
+LIBSQLITE3_FLAGS = "-DSQLITE_MUTEX_NOOP -DSQLITE_OS_KV -DSQLITE_DEBUG"
